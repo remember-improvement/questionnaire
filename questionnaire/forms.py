@@ -8,4 +8,4 @@ class AnswerPostForm(forms.Form):
 
 class LoginPostForm(forms.Form):
     username = forms.CharField(label='username',max_length=32,required=True)
-    email = forms.CharField(label='email',max_length=64,required=True)
+    bankaccount = forms.CharField(label='bandaccount',max_length=64,required=True)

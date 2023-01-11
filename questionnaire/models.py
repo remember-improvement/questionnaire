@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import User
 # #Create your models here.
 
 
@@ -7,7 +8,7 @@ from django.db import models
 class Questions(models.Model):
     '''問卷問題表'''
     caption = models.CharField(max_length=32,verbose_name="問題題目")
-    is_verified = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.caption
     class Meta:
@@ -16,10 +17,12 @@ class Answer(models.Model):
     '''問卷回答表'''   
     question = models.ForeignKey(to="Questions",verbose_name="所屬問題",on_delete=models.CASCADE,related_name='answer_question')
     option = models.ForeignKey(to="Option",null=True,blank=True,on_delete=models.CASCADE,related_name='answer_option')
-    val = models.IntegerField(null=True,blank=True,verbose_name="數字答案")
+    
     content = models.CharField(max_length=255,null=True,blank=True,verbose_name="文本答案")
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='related_user',null=True)
+    is_verified = models.BooleanField(default=False)
     def __str__(self):
-        return self.content
+        return str(self.question)
 
     class Meta:
         verbose_name_plural = "問卷回答表"
@@ -44,3 +47,15 @@ class Option(models.Model):
 #     def __str__(self):
 #         return self.question
 
+class userProfile(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='user_profile')
+    bank_account = models.CharField(max_length=200,null=True)
+    ip_address = models.CharField(max_length=200,null=True)
+    prize = models.IntegerField(validators=[MaxValueValidator(3000),MinValueValidator(1)],null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'questionnaire'
+    def __str__(self):
+        return self.bank_account

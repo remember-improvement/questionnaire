@@ -77,11 +77,11 @@
             <h1 align="center">你答對了<span>{{ correct_answer }}</span>/{{ total_question }}題！</h1>
             <h1 align="center">快去信箱收信吧～</h1>
             <div align="center">
-            {% for qnv in question_list %}
-            <label>答錯題目:{{qnv.caption}}</label> <br />
-            <label ><span>X:{{option_wrong_dict|get_value:qnv.caption }}</span></label> <br />
+            {% for qnv in wrong_answer_question_list %}
+            <label>答錯題目:{{qnv}}</label> <br />
+            <label ><span>X:{{option_wrong_dict|get_value:qnv.content }}</span></label> <br />
             
-            <label >O:{{option_correct_dict|get_value:qnv.caption }}</label> <br />
+            <label >O:{{option_correct_dict|get_value:qnv.content }}</label> <br />
             
             {% endfor %}
             </div>

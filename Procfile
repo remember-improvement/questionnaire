@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath  happy_birthday happy_birthday.wsgi
+web: gunicorn --pythonpath  new_year new_year.wsgi
