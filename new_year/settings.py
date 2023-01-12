@@ -99,7 +99,7 @@ JWT_AUTH = {
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-RUN_ON_HEROKU =os.environ.get('RUN_ON_HEROKU')
+RUN_ON_HEROKU =os.getenv('RUN_ON_HEROKU')
 print(RUN_ON_HEROKU)
 if RUN_ON_HEROKU == '0':
     sql_db_conf = {
@@ -133,7 +133,7 @@ DATABASES = {
         'PORT': sql_db_conf['PORT'],
     }
 }
-
+print(DATABASES)
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
