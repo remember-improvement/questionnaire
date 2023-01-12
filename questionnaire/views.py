@@ -141,27 +141,22 @@ def done(request):
         done_template_name = 'done.html'
         user_id = request.session["user_id"]
         question_is_verified = Answer.objects.filter(user_id=user_id,is_verified=True)
-        #caption = question.caption
         correct_answer_num = question_is_verified.count()
         total_question = Questions.objects.all().count()
         question_is_not_verified = Answer.objects.filter(user_id=user_id,is_verified=False)
         
         
-        # return HttpResponse(question_is_not_verified)
+        
         
         option_correct_dict={}
         option_wrong_dict={}
         for qnv in question_is_not_verified:
             correct_option = Option.objects.filter(question_id=qnv.question_id,is_correct=True).first()#正確答案
-           
-            
-            #caption = Questions.objects.get(id=qnv.question_id)
             option_correct_dict[qnv.content] = correct_option
             answer_content = qnv.content
             option_wrong_dict[qnv.content] = answer_content
-        # return HttpResponse(option_correct_dict)
-        user = User.objects.all().last()
-        send_success_email(receiver_email=user.email,receiver_name=user.username)
+        
+        
         return render(request,done_template_name,{'correct_answer':correct_answer_num,'total_question':total_question,'wrong_answer_question_list': question_is_not_verified,'option_correct_dict':option_correct_dict, 'option_wrong_dict':option_wrong_dict})
 
 

@@ -115,12 +115,12 @@ if RUN_ON_HEROKU == '0':
 if RUN_ON_HEROKU == '1':
     sql_db_conf = {
     'ENGINE':'django.db.backends.postgresql_psycopg2',
-    'HOST': 'ec2-54-157-113-118.compute-1.amazonaws.com',
+    'HOST': 'ec2-54-173-77-184.compute-1.amazonaws.com',
     'PORT': 5432,
-    'NAME': 'd69c76efs9dhme',
+    'NAME': 'da54dpj6m1r5lm',
     'USER': {
-        'NAME': 'jophmskxhahmej',
-        'PASSWORD': 'c191e15462921b6220b0fa1ae4aa4335c876c87a5f0744beffedf3ca00ac0cea'
+        'NAME': 'zlcjrumrgcxcxf',
+        'PASSWORD': 'c08206bb48c5b4a9f85efe485b7dc27a4b54c7d2d0d077e0aaf1f7a0d5a719c4'
     }
 }
 DATABASES = {
