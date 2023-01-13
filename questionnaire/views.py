@@ -6,8 +6,8 @@ from new_year.settings import RUN_ON_HEROKU, SECRET_KEY
 from django.contrib.sessions.backends.db import SessionStore
 import json
 import new_year.settings
-from questionnaire.models import Questions, Answer, Option, userProfile
-
+from questionnaire.models import Questions, Answer, Option, userProfile, Pool
+import random
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from questionnaire.forms import AnswerPostForm, LoginPostForm
@@ -34,8 +34,15 @@ def home(request):
                 ip = request.META.get('REMOTE_ADDR')
             username = form.cleaned_data['username']
             bankaccount = form.cleaned_data['bankaccount']
+            inputcost = form.cleaned_data['inputcost']
             user = User.objects.create(username=username)
-            user.user_profile.create(bank_account=bankaccount,ip_address=ip)
+            user.user_profile.create(bank_account=bankaccount,ip_address=ip,input_cost=inputcost)
+            pool_obj=Pool.objects.filter(id=1).first()
+            if pool_obj is not None:
+                pool_obj.accumulated_prize+=inputcost
+                pool_obj.save()
+            else:
+                Pool.objects.create(accumulated_prize=inputcost)
             request.session["user_id"] = user.id
                 
             start_pk_obj = Questions.objects.all()
@@ -145,6 +152,12 @@ def done(request):
         total_question = Questions.objects.all().count()
         question_is_not_verified = Answer.objects.filter(user_id=user_id,is_verified=False)
         
+        user_profile_obj=userProfile.objects.filter(user_id=user_id).first()
+        user_profile_obj.weight = correct_answer_num
+        input_cost = user_profile_obj.input_cost
+        prize = random.randrange(int(input_cost), int(input_cost*(1+(correct_answer_num/10))), 100)
+        user_profile_obj.prize = prize
+        user_profile_obj.save()
         
         
         
@@ -157,7 +170,7 @@ def done(request):
             option_wrong_dict[qnv.content] = answer_content
         
         
-        return render(request,done_template_name,{'correct_answer':correct_answer_num,'total_question':total_question,'wrong_answer_question_list': question_is_not_verified,'option_correct_dict':option_correct_dict, 'option_wrong_dict':option_wrong_dict})
+        return render(request,done_template_name,{'correct_answer':correct_answer_num,'total_question':total_question,'wrong_answer_question_list': question_is_not_verified,'option_correct_dict':option_correct_dict, 'option_wrong_dict':option_wrong_dict,'prize':prize})
 
 
 @csrf_exempt

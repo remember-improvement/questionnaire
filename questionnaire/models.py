@@ -51,6 +51,8 @@ class userProfile(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='user_profile')
     bank_account = models.CharField(max_length=200,null=True)
     ip_address = models.CharField(max_length=200,null=True)
+    weight = models.IntegerField(null=True)
+    input_cost = models.IntegerField(validators=[MaxValueValidator(1000),MinValueValidator(100)],null=True)
     prize = models.IntegerField(validators=[MaxValueValidator(3000),MinValueValidator(1)],null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True)
@@ -59,3 +61,7 @@ class userProfile(models.Model):
         app_label = 'questionnaire'
     def __str__(self):
         return self.bank_account
+
+
+class Pool(models.Model):
+    accumulated_prize = models.IntegerField(null=True)
