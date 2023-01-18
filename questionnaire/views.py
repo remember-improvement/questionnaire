@@ -155,7 +155,10 @@ def done(request):
         user_profile_obj=userProfile.objects.filter(user_id=user_id).first()
         user_profile_obj.weight = correct_answer_num
         input_cost = user_profile_obj.input_cost
-        prize = random.randrange(int(input_cost), int(input_cost*(1+(correct_answer_num/10))), 100)
+        if correct_answer_num >= 7: 
+            prize = random.randrange(int(input_cost), int(input_cost*(1+(correct_answer_num/10))), 100)
+        else:
+            prize = 200
         user_profile_obj.prize = prize
         user_profile_obj.save()
         
